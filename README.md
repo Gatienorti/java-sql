@@ -267,7 +267,14 @@ Table Name:
 
 * [ ] ***delete all customers that have no orders. Should delete 2 (or 3 if you haven't deleted the record added) records***
 
-```SQL
+```
+DELETE
+FROM customers 
+WHERE customer_id IN
+	(SELECT c.customer_id
+FROM customers c LEFT JOIN orders o
+ON c.customer_id = o.customer_id
+WHERE o.order_date IS NULL)
 
 ```
 
