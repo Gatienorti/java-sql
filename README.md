@@ -36,7 +36,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with SELECT and WHERE clauses
   </details>
 
-```SQL
+```
+SELECT customer_id, city
+FROM customers
+WHERE city = 'London'
 
 ```
 
@@ -47,7 +50,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with SELECT and WHERE clauses
   </details>
 
-```SQL
+```
+SELECT contact_name
+FROM customers
+WHERE postal_code = '1010'
 
 ```
 
@@ -58,7 +64,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with SELECT and WHERE clauses
   </details>
 
-```SQL
+```
+SELECT company_name, phone
+FROM suppliers
+WHERE supplier_id = '11'
 
 ```
 
@@ -69,8 +78,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with SELECT, WHERE, and ORDER BY clauses
   </details>
 
-```SQL
-
+```
+SELECT customer_id, order_date
+FROM orders
+ORDER BY orders DESC
 ```
 
 * [ ] ***find all suppliers who have names longer than 20 characters. Returns 11 records***
@@ -81,7 +92,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * You can use `length(company_name)` to get the length of the name
   </details>
 
-```SQL
+```
+SELECT company_name
+FROM suppliers
+WHERE LENGTH(company_name)>20
 
 ```
 
@@ -94,7 +108,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * Remember to convert your contact title to all upper case for case insensitive comparing so upper(contact_title)
   </details>
 
-```SQL
+```
+SELECT company_name
+FROM customers
+WHERE UPPER(contact_title) LIKE '%MARKET%'
 
 ```
 
@@ -111,7 +128,9 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with the INSERT INTO clause
   </details>
 
-```SQL
+```
+INSERT INTO customers (customer_id, company_name, contact_name, address, city, postal_code, country)
+VALUES ('SHIRE', 'The Shire', 'Bilbo Baggins', '1 Hobbit-Hole', 'Bag End', '111', 'Middle Earth');
 
 ```
 
@@ -122,7 +141,10 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with UPDATE and WHERE clauses
   </details>
 
-```SQL
+```
+UPDATE customers
+SET postal_code = '11122'
+WHERE customer_id = 'SHIRE';
 
 ```
 
@@ -134,7 +156,11 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * There is more information about the COUNT clause on [W3 Schools](https://www.w3schools.com/sql/sql_count_avg_sum.asp)
   </details>
 
-```SQL
+```
+SELECT count(o.order_date), c.Company_Name
+FROM orders o LEFT JOIN customers c
+ON o.customer_id = c.customer_id
+GROUP BY c.Company_Name
 
 ```
 
@@ -145,7 +171,12 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done by adding an ORDER BY clause to the previous answer and changing the group by field
   </details>
 
-```SQL
+```
+SELECT count(o.order_date), c.contact_name
+FROM orders o LEFT JOIN customers c
+ON o.customer_id = c.customer_id
+GROUP BY c.contact_name
+ORDER BY count(o.order_date) DESC
 
 ```
 
@@ -156,7 +187,12 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This is very similar to the previous two queries, however, it focuses on the City rather than the Customer Names
   </details>
 
-```SQL
+```
+SELECT count(o.order_date), c.city
+FROM orders o LEFT JOIN customers c
+ON o.customer_id = c.customer_id
+GROUP BY c.city
+ORDER BY count(o.order_date) DESC
 
 ```
 
@@ -177,41 +213,41 @@ Below are some empty tables to be used to normalize the database
 * Not all of the cells will contain data in the final solution
 * Feel free to edit these tables as necessary
 
-Table Name:
+Table Name: Pets_types
 
-|            |            |            |            |            |            |            |            |            |
+|   Pet_id   |            |            |            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|     1      |    Cat     |            |            |            |            |            |            |            |
+|     2      |    Dog     |            |            |            |            |            |            |            |
+|     3      |    Horse   |            |            |            |            |            |            |            |
+|     4      |    Turtle  |            |            |            |            |            |            |            |
+|     5      |    Fish    |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
-Table Name:
+Table Name:Persons
 
-|            |            |            |            |            |            |            |            |            |
+|Personne_id |    Name    |   Fence    |City Dweller|            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|     1      |    Jane    |     No     |     Yes    |            |            |            |            |            |
+|     2      |    Bob     |     No     |     No     |            |            |            |            |            |
+|     3      |    Sam     |     Yes    |     No     |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
-Table Name:
+Table Name:Pets
 
-|            |            |            |            |            |            |            |            |            |
+|     Id     |Personne_id |   Pet_id   |  Pet_name  |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|     1      |     1      |     1      | Tiger      |            |            |            |            |            |
+|     2      |     1      |     2      | Ellie      |            |            |            |            |            |
+|     3      |     1      |     4      | Toby       |            |            |            |            |            |
+|     4      |     2      |     3      | Joe        |            |            |            |            |            |
+|     5      |     3      |     2      | Ginger     |            |            |            |            |            |
+|     3      |     3      |     1      | Miss kitty |            |            |            |            |            |
+|     7      |     3      |     5      | Bubble     |            |            |            |            |            |
 
 Table Name:
 
@@ -231,7 +267,14 @@ Table Name:
 
 * [ ] ***delete all customers that have no orders. Should delete 2 (or 3 if you haven't deleted the record added) records***
 
-```SQL
+```
+DELETE
+FROM customers 
+WHERE customer_id IN
+	(SELECT c.customer_id
+FROM customers c LEFT JOIN orders o
+ON c.customer_id = o.customer_id
+WHERE o.order_date IS NULL)
 
 ```
 
